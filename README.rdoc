@@ -1,0 +1,18 @@
+== README
+
+Foto Share App
+
+this app will allow you to:
+
+* sync images from an Android smartphone
+* show them as fullscreen slideshow in browser
+
+prerequisites
+
+* device has to be connected via USB in developer mode
+* you will need the Android SDK (https://developer.android.com/studio/index.html) installed to use adb sync (https://github.com/google/adb-sync)
+
+todos
+
+* scale images to show the whole content -> read image attributes from file to know the right size
+* update image list: only append new files, do not reload complete list everytime
