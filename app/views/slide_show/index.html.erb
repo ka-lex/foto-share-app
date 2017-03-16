@@ -1,59 +1,60 @@
 
+<%= javascript_include_tag "jquery-2.1.4.min" %>
 
-<script src='http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.js'></script>
+
 
 <script type="text/javascript" charset="utf-8">
-  // $(function(){
-    // Trigger maximage
-  //  jQuery('#maximage').maximage();
-  // });
-</script>
 
 
-<div id="ajax"></div>
-<script type="text/javascript" charset="utf-8">
+    var myGallery;
+    var duration_till_next_image = 6; // measured in seconds
+    var number_of_images_till_reload = 10;
 
-  function updateDiv(){
+    (function getImagesFromServer(){
     //Get new content through Ajax
-    var $url = "/slide_show/show"
-    $.ajax({
-        url: $url,
-        success: function(data){
+        var $url = "/slide_show/show"
+        $.ajax({
+            url: $url,
+            success: function(data){
             //Load the href
-            $('#ajax').html('').html(data); // To be sure caching clears, we empty #ajax, before filling it again
-            $("maximage").hide();
-        
-        $('#maximage').maximage({
-          backgroundSize: "contain", // show complete picutre, looks a bit stupid
-          cycleOptions: {
-            fx: 'fadeZoom',
-            speed: 5000, // Has to match the speed for CSS transitions in jQuery.maximage.css (lines 30 - 33)
-            //timeout: 0,
-            //prev: '#arrow_left',
-            //next: '#arrow_right',
-            //pause: 1
-          },
-          onFirstImageLoaded: function(){
-            jQuery('#cycle-loader').hide();
-            jQuery('#maximage').fadeIn('fast');
-          },
-          cssBackgroundSize: false // This option is causing choppiness in retina display safari
+
+                myGallery.shuffle = true;
+                myGallery.changeGallery(data.images);
+
+                myGallery.removeImages(myGallery.images);
+                myGallery.addImages(data.images, true, true);
+
+        }
         });
 
-        // Helper function to Fill and Center the HTML5 Video
-        //jQuery('#html5video').maximage('maxcover');
+        setTimeout(getImagesFromServer, number_of_images_till_reload * duration_till_next_image * 1000); // update after 10 images
 
-        // To show it is dynamic html text
-        //jQuery('.in-slide-content').delay(1200).fadeIn();
-        }
-    }); 
 
-  }
+    }());
 
-  $(function(){
-    updateDiv(); 
-  });
+   $(function(){
 
-  setInterval(updateDiv, 60 * 1000); // update every minute
+        myGallery = new mbBgndGallery({
+            containment:"body", // or "#myGalleryElement"
+            timer: duration_till_next_image * 1000,
+            effTimer:1000,
+            controls:false,
+            grayScale:false,
+            shuffle:true,
+            autoStart:true,
+            activateKeyboard:true,
+            effect:{enter:{transform:"scale("+(1+ Math.random()*2)+")",opacity:0},exit:{transform:"scale("+(Math.random()*2)+")",opacity:0}},
+            //preserveWidth:false,
+            //images:<%= raw @images.to_json %>,
+        });
 
+        //Redefining the "zoom" effect
+        myGallery.effects = {
+            enter:{scale:(1+ Math.random()*2),opacity:0, z: 100},
+            exit:{scale:(1 + Math.random()*2),opacity:0, z:100},
+            enterTiming:"ease-out",
+            exitTiming:"ease-in"
+            };
+    });
+   
 </script>

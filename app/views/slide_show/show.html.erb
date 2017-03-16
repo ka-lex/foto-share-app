@@ -1,6 +1,1 @@
-<div id="maximage">
-  <% @images.each do |image| %>
-    <%= image_tag image, size: "200x200" %>
-  <% end %>
-
-</div>
+<% @images.to_json %>

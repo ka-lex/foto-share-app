@@ -1,0 +1,99 @@
+/*
+https://github.com/pupunzi/jquery.mb.bgndGallery/wiki
+*/
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+
+
+
+<script type="text/javascript" charset="utf-8">
+  // $(function(){
+    // Trigger maximage
+  //  jQuery('#maximage').maximage();
+  // });
+
+    function getImagesFromServer(){
+    //Get new content through Ajax
+        var $url = "/slide_show/show"
+        $.ajax({
+            url: $url,
+            success: function(data){
+            //Load the href
+
+                console.log (data);
+
+                var array=[“myImageURL_1.jpg”,“myImageURL_2.jpg”,…] data.images;
+        }
+        }); 
+
+    }
+
+   $(function(){
+
+    //Redefining the "zoom" effect
+            $.mbBgndGallery.effects.zoom = {
+                enter:{scale:(1+ Math.random()*2),opacity:0, z: 100},
+                exit:{scale:(1 + Math.random()*2),opacity:0, z:100},
+                enterTiming:"ease-out",
+                exitTiming:"ease-in"
+            };
+
+            /**
+             *
+             * Initialize the gallery
+             */
+            $.mbBgndGallery.buildGallery({
+                //containment:"#wrapper",
+                containment:"body",
+                timer:3000,
+                effTimer:1000,
+                controls:false,
+                grayScale:false,
+                shuffle:true,
+                preserveWidth:false,
+                effect:{enter:{transform:"scale("+(1+ Math.random()*2)+")",opacity:0},exit:{transform:"scale("+(Math.random()*2)+")",opacity:0}},
+
+                // If your server allow directory listing you can use:
+                // (however this doesn't work locally on your computer)
+
+                folderPath:"slide_show/show",
+
+                // else:
+
+                //images: <%= raw @images.to_json %>,
+                images: getImagesFromServer(),
+
+  
+                onStart:function(){},
+                onPause:function(){},
+                onPlay:function(opt){},
+                onChange:function(opt){
+
+                    //opt.images = jQuery.loadFromSystem(opt.folderPath) || opt.images;
+                    opt.images = opt.images; // getImagesFromServer();
+                    
+                    myGallery.addImages(array, true, true);
+
+                }, //idx=the zero based index of the displayed photo
+                onNext:function(opt){
+                },   //opt=the options relatives to this component instance
+                onPrev:function(opt){}   //opt=the options relatives to this component instance
+            });
+
+            $(".bw").toggle(
+                    function(){
+                        var el=$("body").get(0);
+                        el.opt.grayScale=true;
+                        $(this).addClass("sel");
+                        el.opt.gallery.find("img:first").greyScale();
+                    },
+                    function(){
+                        var el=$("body").get(0);
+                        el.opt.grayScale=false;
+                        $(this).removeClass("sel");
+                        el.opt.gallery.find("img:first").attr("src",el.opt.images[el.opt.imageCounter]);
+                    }
+            )
+        });
+
+</script>
