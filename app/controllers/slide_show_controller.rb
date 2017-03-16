@@ -1,7 +1,7 @@
 class SlideShowController < ApplicationController
   def index
     # get list of images
-    @images = Dir.glob("#{Rails.root}/app/assets/images/upload/*.jpg")
+    @images = SlideShow.images
 
     @images = @images.shuffle.collect do |image|
       view_context.image_path "upload/#{image.split('/').last}"
@@ -10,7 +10,7 @@ class SlideShowController < ApplicationController
   end
 
   def show
-    @images = Dir.glob("#{Rails.root}/app/assets/images/upload/*.jpg")
+    @images = SlideShow.images
 
     @images = @images.shuffle.collect do |image|
       view_context.image_path "upload/#{image.split('/').last}"
