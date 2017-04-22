@@ -12,6 +12,11 @@ prerequisites
 * device has to be connected via USB in developer mode
 * you will need the Android SDK (https://developer.android.com/studio/index.html) installed to use adb sync (https://github.com/google/adb-sync)
 
+run it
+
+* run the webserver to be able to open the rails app in your browser (dev: localhost:3000)
+* run the foto sync script to download the newest pictures from your android phone, e.g. from your WhatsApp picture directory: under "bin" run "./foto-sync.sh". Ensure that you have adb-sync installed and your phone connected via USB in developer mode.
+
 todos
 
 * scale images to show the whole content -> read image attributes from file to know the right size
